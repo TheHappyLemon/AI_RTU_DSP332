@@ -12,12 +12,13 @@ class Torch:
         return True
 
 class Node:
-    def __init__(self, P1:dict, P2:dict, time) -> None:
+    def __init__(self, P1:dict, P2:dict, time, depth) -> None:
         self.P1 = P1.copy()
         self.P2 = P2.copy()
         self.torch = Torch(time)
         self.winnable = False
         self.children = []
+        self.depth = depth
        
     def goForward(self, names:list) -> str:
         if len(self.P1) < 2:
@@ -79,14 +80,24 @@ class Node:
         return self.P1 == END.P1 and self.P2 == END.P2
 
     def copy(self):
-        return Node(self.P1, self.P2, self.torch.time)
+        return Node(self.P1, self.P2, self.torch.time, self.depth + 1)
 
     def getTree(self, indent):
         for child in self.children:
             print("-" * indent + child.toStringSmooth(), (("WON" if child.winnable else "LOST") if len(child.children) == 0 else ""), "t =",child.torch.time)
             child.getTree(indent + 3)
 
-END = Node({}, {'A':1, 'B':3, 'C':5}, 0)
+    def getTree1(self, indent):
+        if len(self.children) > 0:
+            for child in self.children:
+                child.getTree1(indent + 3)
+                print("-" * indent + child.toStringSmooth(), (("WON" if child.winnable else "LOST") if len(child.children) == 0 else ""), "t =",child.torch.time)
+        else:
+            pass
+            #print("-" * indent + self.toStringSmooth(), ("WON" if self.winnable else "LOST"), "t =", self.torch.time)
+
+END = Node({}, {'A':1, 'B':3, 'C':5}, 0, -1)
+stack = []
 
 def play(node:Node):
     variants_f = node.getVariants(2, "P1")
@@ -98,6 +109,7 @@ def play(node:Node):
             #print(answ)
             return
         node.children.append(node_f)
+        stack.append(node_f)
         # print(i, node_f.toString())
         if node_f.isEnd():
             # print(i, "WON")
@@ -112,20 +124,59 @@ def play(node:Node):
                     # print(answ)
                     return
                 node_f.children.append(node_b)
+                stack.append(node_b)
                 # print(i, j, node_b.toString())
                 play(node_b)
             j = j + 1
         i = i + 1
 
+def getMaxDepth():
+    m = 1
+    for n in stack:
+        if n.depth > m:
+            m = n.depth
+    return m
+
+def getLevelNodes(depth):
+    res = []
+    for n in stack:
+        if n.depth == depth:
+            res.append(n)
+    return res
+
+def printSmooth(depth, rowLen):
+    level = getLevelNodes(depth)
+    #for l in level:
+        #print(l.toStringSmooth(), end = " ")
+    #input()
+    indent = rowLen - (len(level) * 20)
+    indent = indent // (len(level) + 1 if len(level) == 1 else len(level))
+    #indent =  rowLen // (len(level) + 1)
+    for node in level:
+        print((" " * indent) + node.toStringSmooth() + (("W" if node.winnable else "L") if len(node.children) == 0 else "") + " " + str(node.torch.time), end = " ")
+    print()
+    if depth < getMaxDepth():
+        printSmooth(depth + 1, rowLen)
+    
+
 
 if __name__ == "__main__":
-    node = Node({'A':1, 'B':3, 'C':5}, {}, 12)
-    a = node.copy()
+    node = Node({'A':1, 'B':3, 'C':5}, {}, 12, 1)
     try:
+        stack.append(node)
         play(node)
         print("*" * 30)
-        print(node.toStringSmooth())
-        node.getTree(3)
-        pass
+        ind = 0
+        # count last row entries
+        for n in stack:
+            if len(n.children) == 0:
+                ind = ind + 1
+            # 25 sym for single node
+        ind = ind * 30     
+        printSmooth(1, ind)
+        #print(node.toStringSmooth())
+        #node.getTree1(3)
+        #print(node.toStringSmooth())
+        input()
     except Exception as e:
         print(str(e))
