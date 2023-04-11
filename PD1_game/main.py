@@ -1,5 +1,7 @@
 from tkinter import *
 from constants import *
+from Node import Node
+from Tree import Tree
 
 class NumGame:
     def __init__(self):
@@ -7,6 +9,7 @@ class NumGame:
         self.root.title("PR1: Artjoms Kučerjavijs")
         self.root.resizable(False, False)
         self.create_widgets()
+        self.tree = None
 
     def start(self):
         self.root.mainloop()
@@ -75,10 +78,28 @@ class NumGame:
         number = total - number_2
         self.set_total_number(number)
     
+    def getTree(self):
+        root_node = Node(int(self.label_result_num.cget("text")), 0) 
+        self.tree = Tree(root_node)
+        self.tree.createTree(root_node)
+
+    def printTree(self):
+        # Outputs tree in UNIX-style
+        print("Generated tree:")
+        self.tree.printTree(3)
+        
+    def printProof(self):
+        # Proof that there are no duplicates in generated tree!
+        self.tree.printAll()
+        
+
     def restart_game(self):
         print("Game restarted...")
         
 
+
 if __name__ == "__main__":
     my_game = NumGame()
+    my_game.getTree()
+    my_game.printTree()
     my_game.start()
