@@ -7,7 +7,6 @@ class Tree:
         self.addNode(self.root)
     
     def addNode(self, node : Node) -> None:
-        #print("adding", node.toString())
         self.nodes.append(node)
         
     def createTree(self, node : Node):            
@@ -48,10 +47,27 @@ class Tree:
 
     def findNode(self, number : int, depth : int) -> bool:
         # check if on a given depth there already is such node
-        #print(f"looking for num {number} depth {depth}")
         for node in self.nodes:
-            #print(node.toString(), "same?->", node.number == number and node.depth == depth)
-            #input()
             if node.number == number and node.depth == depth:
                 return node
         return None
+    
+    def findOptimal(self, number : int, depth : int, maximize : bool) -> bool:
+        # Find best variant between node children (max or min)
+        node = self.findNode(number, depth)
+        if maximize:
+            optimal = float('-inf')
+        else:
+            optimal = float('inf')
+        result = None
+        for child in node.children:
+            if maximize:
+                if child.value > optimal:
+                    result = child
+                    optimal = max(optimal, child.value)
+            else:
+                if child.value < optimal:
+                    result = child
+                    optimal = min(optimal, child.value)
+        #print(f"optimal value when maximizin = {maximize} for {number} on lvl {depth} is {result.number}")
+        return result

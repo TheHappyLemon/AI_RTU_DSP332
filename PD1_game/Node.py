@@ -22,11 +22,16 @@ class Node:
             variants.append(node)
         return variants
 
+    # first player will always be maximizator
+    # second player will always be minimizator
+
     def evaluate(self):
+        # Seit ir koka novertejums ar minimaksa algoritmu, kurs uzstada vertibu 0 ja ir neizskirta spele
+        # vertibu 1 ja pirmais speletajs uzvareja
+        # un vertibu -1 ja otrais speletajs uzvareja
         if self.evaluated:
             # saves some time
             return
-        #print(f"evaluating {self.number}")
         # if it is a leaf
         if len(self.children) == 0:
             if self.number == 0:
@@ -38,31 +43,23 @@ class Node:
             else:
                 # Second player win
                 self.value = 1
-            #print(f"set {self.number} to {self.value}")
             self.evaluated = True
         else:
             # Not a leaf
             if self.depth % 2 == 1:
                 # First player's (maximizator) turn
-                #print("maximizin")
                 max_val = float('-inf')
                 for child in self.children:
                     child.evaluate()
-                    #print(f"max({max_val}, {child.value}) = {max(max_val, child.value)}")
                     max_val = max(max_val, child.value)
-                #print(f"setting {self.number} to {max_val}")
                 self.value = max_val
                 self.evaluated = True
             else:
                 # Second player's (minimizator) turn
-                #print("minimizin")
                 min_val = float('inf')
                 for child in self.children:
                     child.evaluate()
-                    #print(f"min({min_val}, {child.value}) = {min(min_val, child.value)}")
                     min_val = min(min_val, child.value)
-                #print(f"setting {self.number} to {min_val}")
-                #input()
                 self.value = min_val
                 self.evaluated = True
 
