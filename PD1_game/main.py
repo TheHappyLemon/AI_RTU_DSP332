@@ -108,7 +108,11 @@ class NumGame:
     def __handle_input__(self, number : str, is_player : bool = False):
         # check if number was provided
         try:
+            # :))))
+            if number.startswith('-'):
+                raise ValueError
             number = int(number)
+            
         except ValueError:
             self.label_msg.config(text="Invalid input! Enter an integer")
             return False
@@ -206,7 +210,9 @@ class NumGame:
         total = int(self.label_result_num.cget("text")) 
         node = self.tree.findNode(total, self.game_depth)
         if len(node.children) == 0:
-            if node.number % 2 == 1:
+            if node.number == 0:
+                self.label_msg.config(text="Game over! Draw")
+            elif node.number % 2 == 1:
                 if self.is_ai_first:
                     self.label_msg.config(text="Game over! Human won")
                 else:
