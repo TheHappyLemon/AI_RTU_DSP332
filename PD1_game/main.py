@@ -201,6 +201,7 @@ class NumGame:
             self.game_depth = self.game_depth + 1
             if not self.game_over():
                 #print("ai moved")
+                self.label_msg.config(text=f"")
                 self.is_ai_turn = False
             else:
                 self.playing = False
