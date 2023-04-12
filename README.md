@@ -8,7 +8,8 @@ studiju kursā tiek piedāvāts izaicinājums. Studentam ir jānodrošina:
 • stāvokļu telpas grafa ģenerēšana;
 • ģenerētā stāvokļu telpas grafa izvade uz ekrāna.
 2) PD1_game - Pirmais praktiskais darbs: Divpersonu spēles ar pilnu informāciju izstrāde
-
+  Lai lejuplādētu exe lokāli, jums ir jālejuplādē main.exe fails, ko var atrast PD1_game direktorijā.
+  
 Darba izpildei studentam ir jāizvēlas nulles summas divpersonu spēle ar pilnu informāciju.
 Uzdevuma izpildei nav atļauts izvēlēties spēles “Krustiņi-nullītes” un “Connect 4”.
 Programmatūrā ir jānodrošina šādas iespējas lietotājam:
