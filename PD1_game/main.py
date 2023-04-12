@@ -79,9 +79,12 @@ class NumGame:
         self.set_total_number(number)
     
     def getTree(self):
-        root_node = Node(int(self.label_result_num.cget("text")), 0) 
+        root_node = Node(int(self.label_result_num.cget("text")), 1) 
         self.tree = Tree(root_node)
         self.tree.createTree(root_node)
+
+    def evaluateTree(self):
+        self.tree.evaluate()
 
     def printTree(self):
         # Outputs tree in UNIX-style
@@ -101,5 +104,6 @@ class NumGame:
 if __name__ == "__main__":
     my_game = NumGame()
     my_game.getTree()
+    my_game.evaluateTree()
     my_game.printTree()
     my_game.start()

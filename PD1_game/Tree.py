@@ -23,6 +23,9 @@ class Tree:
                 node.children.append(node_existing)
             self.createTree(variant)
 
+    def evaluate(self) -> None:
+        self.root.evaluate()
+
     def printAll(self):
         # Proof that there are no duplicates in the tree!
         sorted_list = sorted(self.nodes, key=lambda x: x.number)
